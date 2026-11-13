@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1E3A8A" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>Result of Bhuwan Career Institute</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { margin: 0; background: #F1F5F9; color: #0F172A; padding-bottom: 45px; }
+    .header { background: #1E3A8A; color: #fff; text-align: center; padding: 14px 10px; }
+    .header h1 { margin: 0; font-size: 18px; }
+    .header p { margin: 3px 0 0; font-size: 12px; color: #BFDBFE; }
+
+    .campus-bar { display: flex; justify-content: space-around; background: #172554; padding: 8px 4px; }
+    .campus-btn { background: #1E3A8A; color: #E2E8F0; border: none; padding: 7px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .campus-btn.active { background: #F59E0B; color: #0F172A; font-weight: 700; }
+
+    .tabs { display: flex; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 10; }
+    .tab { flex: 1; padding: 12px 5px; text-align: center; background: none; border: none; border-bottom: 3px solid transparent; font-weight: 600; color: #64748B; font-size: 13px; cursor: pointer; }
+    .tab.active { border-bottom-color: #1E3A8A; color: #1E3A8A; font-weight: 700; }
+
+    .container { padding: 12px; max-width: 600px; margin: auto; }
+    .card { background: #fff; border-radius: 10px; padding: 14px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .student-card { border-left: 4px solid #1E3A8A; display: flex; justify-content: space-between; align-items: center; }
+    .st-name { font-size: 16px; font-weight: 700; margin: 0 0 3px; }
+    .st-meta { font-size: 12px; color: #475569; margin: 2px 0; }
+    .st-stat { font-size: 12px; font-weight: 700; color: #047857; margin-top: 5px; }
+
+    .btn { background: #1E3A8A; color: #fff; border: none; padding: 11px 14px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; width: 100%; margin-top: 10px; }
+    .btn-sm { width: auto; margin-top: 0; padding: 10px; font-size: 11px; line-height: 1.3; }
+    .btn-green { background: #15803D; }
+    .btn-teal { background: #0D9488; }
+
+    label { display: block; font-size: 12px; font-weight: 700; color: #334155; margin: 10px 0 4px; }
+    input, select { width: 100%; padding: 9px 10px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px; background: #F8FAFC; }
+    .row { display: flex; gap: 6px; }
+    .marks-box { background: #F8FAFC; border: 1px solid #E2E8F0; padding: 10px; border-radius: 8px; margin-top: 8px; }
+
+    /* Modal */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50; overflow-y: auto; padding: 10px; }
+    .modal-content { background: #E2E8F0; border-radius: 10px; max-width: 550px; margin: 10px auto; overflow: hidden; }
+    .modal-top { background: #1E3A8A; color: #fff; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; }
+    .close-btn { background: none; border: none; color: #FDE047; font-size: 16px; font-weight: 700; cursor: pointer; }
+
+    /* Report Paper */
+    #report-capture { background: #fff; border: 2px solid #1E3A8A; border-radius: 8px; padding: 15px; margin: 12px; }
+    .rep-head { text-align: center; border-bottom: 2px solid #1E3A8A; padding-bottom: 8px; }
+    .rep-head h2 { margin: 0; font-size: 17px; color: #1E3A8A; }
+    .rep-head p { margin: 2px 0; font-size: 12px; font-weight: 700; color: #B45309; }
+    .rep-info { background: #F8FAFC; padding: 8px; border-radius: 6px; margin: 10px 0; font-size: 13px; line-height: 1.5; }
+    .exam-item { border: 1px solid #CBD5E1; border-radius: 6px; padding: 8px; margin-bottom: 8px; font-size: 13px; }
+    .exam-top { display: flex; justify-content: space-between; font-weight: 700; border-bottom: 1px solid #E2E8F0; padding-bottom: 4px; margin-bottom: 5px; }
+    .sub-row { display: flex; justify-content: space-between; padding: 2px 0; }
+    .exam-bot { display: flex; justify-content: space-between; border-top: 1px solid #E2E8F0; padding-top: 5px; margin-top: 5px; font-weight: 700; font-size: 12px; color: #1E3A8A; }
+    .overall-box { background: #EFF6FF; border-left: 4px solid #1E3A8A; padding: 10px; border-radius: 6px; font-size: 13px; }
+    .rep-watermark { text-align: center; font-size: 10px; color: #94A3B8; font-style: italic; margin-top: 10px; }
+
+    .footer-watermark { position: fixed; bottom: 0; left: 0; right: 0; background: #0F172A; color: #94A3B8; text-align: center; font-size: 11px; font-weight: 600; padding: 7px; z-index: 40; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Result of Bhuwan Career Institute</h1>
+    <p>Academic Monitoring & Progress Portal</p>
+  </div>
+
+  <div class="campus-bar">
+    <button class="campus-btn active" onclick="setCampus('Vivekanand Campus', this)">Vivekanand</button>
+    <button class="campus-btn" onclick="setCampus('Sankalp Campus', this)">Sankalp</button>
+    <button class="campus-btn" onclick="setCampus('Samunnat Campus', this)">Samunnat</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tab-students" onclick="switchTab('students')">Students</button>
+    <button class="tab" id="tab-register" onclick="switchTab('register')">+ Admission</button>
+    <button class="tab" id="tab-marks" onclick="switchTab('marks')">Batch Marks</button>
+  </div>
+
+  <div class="container">
+    <!-- TAB 1: STUDENTS -->
+    <div id="view-students">
+      <h3 id="campus-heading" style="margin: 4px 0 10px; font-size: 15px;">Vivekanand Campus — Students</h3>
+      <div id="students-list"></div>
+    </div>
+
+    <!-- TAB 2: ADMISSION -->
+    <div id="view-register" class="card hidden">
+      <h3 style="margin-top:0; font-size:16px;">New Student Admission</h3>
+      <label>Student Full Name *</label>
+      <input type="text" id="reg-name" placeholder="Enter student name" />
+
+      <label>Class *</label>
+      <select id="reg-class">
+        <option>Class 8</option>
+        <option>Class 9</option>
+        <option selected>Class 10</option>
+        <option>Class 11</option>
+        <option>Class 12</option>
+        <option>Target/Dropper</option>
+      </select>
+
+      <label>Batch Name / Code *</label>
+      <input type="text" id="reg-batch" placeholder="e.g. MORNING-A, BATCH-1" />
+
+      <label>Parent 1 Mobile Number (WhatsApp) *</label>
+      <input type="tel" id="reg-p1" maxlength="10" placeholder="10-digit number" />
+
+      <label>Parent 2 Mobile Number (Optional)</label>
+      <input type="tel" id="reg-p2" maxlength="10" placeholder="10-digit number" />
+
+      <button class="btn" onclick="registerStudent()">Register Student to Coaching</button>
+    </div>
+
+    <!-- TAB 3: BATCH MARKS -->
+    <div id="view-marks" class="card hidden">
+      <h3 style="margin-top:0; font-size:16px;">Batch-Wise Marks Entry</h3>
+      <label>Exam / Test Title *</label>
+      <input type="text" id="exam-name" placeholder="e.g. Weekly Test 01" />
+
+      <div class="row">
+        <div style="flex:1">
+          <label>Class</label>
+          <select id="marks-class" onchange="renderBatchInputs()">
+            <option>Class 8</option>
+            <option>Class 9</option>
+            <option selected>Class 10</option>
+            <option>Class 11</option>
+            <option>Class 12</option>
+            <option>Target/Dropper</option>
+          </select>
+        </div>
+        <div style="flex:1">
+          <label>Batch Filter</label>
+          <input type="text" id="marks-batch" placeholder="All or e.g. A1" oninput="renderBatchInputs()" />
+        </div>
+      </div>
+
+      <label>Max Marks Per Subject</label>
+      <input type="number" id="max-marks" value="100" />
+
+      <label>3 Subject Names</label>
+      <div class="row">
+        <input type="text" id="sub1" value="Physics" />
+        <input type="text" id="sub2" value="Chemistry" />
+        <input type="text" id="sub3" value="Maths/Bio" />
+      </div>
+
+      <div id="batch-students-inputs" style="margin-top:10px;"></div>
+      <button class="btn btn-green" onclick="publishMarks()">Submit & Auto-Publish % and Percentile</button>
+    </div>
+  </div>
+
+  <!-- PROGRESS REPORT MODAL -->
+  <div id="report-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-top">
+        <strong>Official Progress Report</strong>
+        <button class="close-btn" onclick="closeModal()">Close ✕</button>
+      </div>
+      <div id="report-capture"></div>
+      <div style="padding: 0 12px 15px;">
+        <button class="btn btn-green" onclick="shareReportImage()">🖼️ Share Progress Report as WhatsApp Image</button>
+        <button class="btn btn-teal" id="btn-wa-p1">💬 Send Text Report to Parent 1</button>
+        <button class="btn btn-teal hidden" id="btn-wa-p2">💬 Send Text Report to Parent 2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-watermark">app build and designed by SHAILESH PRABHAKAR</div>
+
+  <script>
+    const STORAGE_KEY = 'bhuwan_institute_web_v1';
+    let currentCampus = 'Vivekanand Campus';
+    let students = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    let activeStudent = null;
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
+    }
+
+    function setCampus(campus, btn) {
+      currentCampus = campus;
+      document.querySelectorAll('.campus-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('campus-heading').innerText = `${currentCampus} — Students`;
+      renderStudents();
+      renderBatchInputs();
+    }
+
+    function switchTab(tab) {
+      ['students', 'register', 'marks'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.add('hidden');
+        document.getElementById(`tab-${t}`).classList.remove('active');
+      });
+      document.getElementById(`view-${tab}`).classList.remove('hidden');
+      document.getElementById(`tab-${tab}`).classList.add('active');
+      if (tab === 'students') renderStudents();
+      if (tab === 'marks') renderBatchInputs();
+    }
+
+    function registerStudent() {
+      const name = document.getElementById('reg-name').value.trim();
+      const studentClass = document.getElementById('reg-class').value;
+      const batch = document.getElementById('reg-batch').value.trim().toUpperCase();
+      const p1 = document.getElementById('reg-p1').value.replace(/\D/g, '');
+      const p2 = document.getElementById('reg-p2').value.replace(/\D/g, '');
+
+      if (!name || !batch || p1.length < 10) {
+        alert('Please enter Student Name, Batch, and a valid 10-digit Parent 1 number.');
+        return;
+      }
+
+      students.unshift({
+        id: Date.now().toString(),
+        name,
+        campus: currentCampus,
+        studentClass,
+        batch,
+        parent1: p1,
+        parent2: p2,
+        exams: []
+      });
+      save();
+      document.getElementById('reg-name').value = '';
+      document.getElementById('reg-batch').value = '';
+      document.getElementById('reg-p1').value = '';
+      document.getElementById('reg-p2').value = '';
+      alert(`${name} registered in ${currentCampus}!`);
+      switchTab('students');
+    }
+
+    function getRemark(avg) {
+      if (avg >= 90) return 'Outstanding academic excellence! Consistent top-tier performance.';
+      if (avg >= 75) return 'Very good progress! Strong grasp of concepts. Aim for 90%+.';
+      if (avg >= 60) return 'Satisfactory performance with steady growth. Regular revision advised.';
+      if (avg >= 40) return 'Needs focused attention and daily practice. Parents advised to monitor study.';
+      return 'Critical improvement required. Extra guidance and regular test attendance needed.';
+    }
+
+    function getSummary(st) {
+      if (!st.exams.length) return { avg: 0, percentile: 0, remark: 'No exams recorded yet.' };
+      const sum = st.exams.reduce((a, b) => a + b.percentage, 0);
+      const avg = (sum / st.exams.length).toFixed(2);
+      const percentile = st.exams[st.exams.length - 1].percentile;
+      return { avg, percentile, remark: getRemark(parseFloat(avg)) };
+    }
+
+    function renderStudents() {
+      const list = document.getElementById('students-list');
+      const filtered = students.filter(s => s.campus === currentCampus);
+      if (!filtered.length) {
+        list.innerHTML = `<div class="card" style="text-align:center;color:#64748B;">No students registered in ${currentCampus} yet.</div>`;
+        return;
+      }
+      list.innerHTML = filtered.map(st => {
+        const sum = getSummary(st);
+        return `
+          <div class="card student-card">
+            <div>
+              <p class="st-name">${st.name}</p>
+              <p class="st-meta">${st.studentClass} • Batch: ${st.batch}</p>
+              <p class="st-meta">Parents: ${st.parent1}${st.parent2 ? ' | ' + st.parent2 : ''}</p>
+              <p class="st-stat">Exams: ${st.exams.length} | Avg: ${sum.avg}% | Latest: ${sum.percentile}%ile</p>
+            </div>
+            <button class="btn btn-sm" onclick="openReport('${st.id}')">Progress<br>Report</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderBatchInputs() {
+      const cls = document.getElementById('marks-class').value;
+      const batchFilter = document.getElementById('marks-batch').value.trim().toUpperCase();
+      const filtered = students.filter(s =>
+        s.campus === currentCampus &&
+        s.studentClass === cls &&
+        (!batchFilter || s.batch === batchFilter)
+      );
+      const container = document.getElementById('batch-students-inputs');
+      if (!filtered.length) {
+        container.innerHTML = `<p style="color:#64748B;font-size:13px;">No students found for this selection.</p>`;
+        return;
+      }
+      container.innerHTML = filtered.map(st => `
+        <div class="marks-box" data-stid="${st.id}">
+          <strong style="font-size:13px;">${st.name} (${st.batch})</strong>
+          <div class="row" style="margin-top:6px;">
+            <input type="number" class="m1" placeholder="Sub 1" />
+            <input type="number" class="m2" placeholder="Sub 2" />
+            <input type="number" class="m3" placeholder="Sub 3" />
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function publishMarks() {
+      const examName = document.getElementById('exam-name').value.trim();
+      if (!examName) return alert('Enter Exam / Test Title.');
+
+      const maxPerSub = parseFloat(document.getElementById('max-marks').value) || 100;
+      const totalMax = maxPerSub * 3;
+      const s1Name = document.getElementById('sub1').value || 'Subject 1';
+      const s2Name = document.getElementById('sub2').value || 'Subject 2';
+      const s3Name = document.getElementById('sub3').value || 'Subject 3';
+
+      const rows = document.querySelectorAll('#batch-students-inputs .marks-box');
+      const scored = [];
+
+      rows.forEach(row => {
+        const stId = row.getAttribute('data-stid');
+        const v1 = row.querySelector('.m1').value;
+        const v2 = row.querySelector('.m2').value;
+        const v3 = row.querySelector('.m3').value;
+        if (v1 !== '' && v2 !== '' && v3 !== '') {
+          const m1 = parseFloat(v1) || 0;
+          const m2 = parseFloat(v2) || 0;
+          const m3 = parseFloat(v3) || 0;
+          const total = m1 + m2 + m3;
+          const percentage = parseFloat(((total / totalMax) * 100).toFixed(2));
+          scored.push({ stId, m1, m2, m3, total, percentage });
+        }
+      });
+
+      if (!scored.length) return alert('Please enter marks for at least one student.');
+
+      scored.forEach(item => {
+        const countLessOrEqual = scored.filter(o => o.total <= item.total).length;
+        const percentile = parseFloat(((countLessOrEqual / scored.length) * 100).toFixed(2));
+        const student = students.find(s => s.id === item.stId);
+        if (student) {
+          student.exams.push({
+            examName,
+            date: new Date().toLocaleDateString('en-IN'),
+            subjects: [
+              { name: s1Name, marks: item.m1, max: maxPerSub },
+              { name: s2Name, marks: item.m2, max: maxPerSub },
+              { name: s3Name, marks: item.m3, max: maxPerSub }
+            ],
+            totalObtained: item.total,
+            totalMax,
+            percentage: item.percentage,
+            percentile
+          });
+        }
+      });
+
+      save();
+      document.getElementById('exam-name').value = '';
+      alert(`Published results with automatic Percentage & Percentile for ${scored.length} students!`);
+      switchTab('students');
+    }
+
+    function openReport(stId) {
+      activeStudent = students.find(s => s.id === stId);
+      if (!activeStudent) return;
+      const sum = getSummary(activeStudent);
+
+      const examsHtml = activeStudent.exams.length
+        ? activeStudent.exams.map(ex => `
+            <div class="exam-item">
+              <div class="exam-top"><span>${ex.examName}</span><span>${ex.date}</span></div>
+              ${ex.subjects.map(sb => `<div class="sub-row"><span>${sb.name}</span><strong>${sb.marks} / ${sb.max}</strong></div>`).join('')}
+              <div class="exam-bot">
+                <span>Total: ${ex.totalObtained}/${ex.totalMax}</span>
+                <span>Percent: ${ex.percentage}%</span>
+                <span style="color:#047857;">Percentile: ${ex.percentile}%ile</span>
+              </div>
+            </div>
+          `).join('')
+        : '<p style="text-align:center;color:#64748B;">No exam marks published yet.</p>';
+
+      document.getElementById('report-capture').innerHTML = `
+        <div class="rep-head">
+          <h2>BHUWAN CAREER INSTITUTE</h2>
+          <p>${activeStudent.campus}</p>
+          <div style="font-size:11px;color:#475569;font-weight:700;">STUDENT PROGRESS REPORT</div>
+        </div>
+        <div class="rep-info">
+          <strong>Student:</strong> ${activeStudent.name}<br/>
+          <strong>Class & Batch:</strong> ${activeStudent.studentClass} (${activeStudent.batch})<br/>
+          <strong>Parents:</strong> ${activeStudent.parent1}${activeStudent.parent2 ? ' / ' + activeStudent.parent2 : ''}
+        </div>
+        ${examsHtml}
+        ${activeStudent.exams.length ? `
+          <div class="overall-box">
+            <strong>Overall Average:</strong> ${sum.avg}% | <strong>Latest Percentile:</strong> ${sum.percentile}%ile<br/>
+            <div style="margin-top:5px;"><strong>Progress Statement:</strong> ${sum.remark}</div>
+          </div>
+        ` : ''}
+        <div class="rep-watermark">app build and designed by SHAILESH PRABHAKAR</div>
+      `;
+
+      const p1Btn = document.getElementById('btn-wa-p1');
+      p1Btn.innerText = `💬 Send Text Report to Parent 1 (${activeStudent.parent1})`;
+      p1Btn.onclick = () => sendWhatsAppText(activeStudent.parent1);
+
+      const p2Btn = document.getElementById('btn-wa-p2');
+      if (activeStudent.parent2) {
+        p2Btn.classList.remove('hidden');
+        p2Btn.innerText = `💬 Send Text Report to Parent 2 (${activeStudent.parent2})`;
+        p2Btn.onclick = () => sendWhatsAppText(activeStudent.parent2);
+      } else {
+        p2Btn.classList.add('hidden');
+      }
+
+      document.getElementById('report-modal').style.display = 'block';
+    }
+
+    function closeModal() {
+      document.getElementById('report-modal').style.display = 'none';
+    }
+
+    function sendWhatsAppText(phone) {
+      const sum = getSummary(activeStudent);
+      let examsTxt = '';
+      activeStudent.exams.forEach((ex, i) => {
+        const subs = ex.subjects.map(s => `${s.name}: ${s.marks}/${s.max}`).join(', ');
+        examsTxt += `\n${i + 1}. *${ex.examName}* (${ex.date})\n   ${subs}\n   Total: ${ex.totalObtained}/${ex.totalMax} | *${ex.percentage}%* | Percentile: *${ex.percentile}%ile*\n`;
+      });
+
+      const msg = `*RESULT OF BHUWAN CAREER INSTITUTE*\nCampus: ${activeStudent.campus}\n----------------------\n*Student:* ${activeStudent.name}\n*Class:* ${activeStudent.studentClass} | *Batch:* ${activeStudent.batch}\n----------------------${examsTxt}----------------------\n*Overall Average:* ${sum.avg}%\n*Latest Percentile:* ${sum.percentile}%ile\n*Progress Statement:* ${sum.remark}\n\n_app build and designed by SHAILESH PRABHAKAR_`;
+      window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    async function shareReportImage() {
+      const element = document.getElementById('report-capture');
+      const canvas = await html2canvas(element, { scale: 2 });
+      canvas.toBlob(async (blob) => {
+        const file = new File([blob], `${activeStudent.name}_Report.png`, { type: 'image/png' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Progress Report - Bhuwan Career Institute',
+            text: `Progress Report of ${activeStudent.name}`
+          });
+        } else {
+          const link = document.createElement('a');
+          link.download = `${activeStudent.name}_Report.png`;
+          link.href = canvas.toDataURL();
+          link.click();
+          alert('Report image downloaded to your phone! You can now attach it in WhatsApp.');
+        }
+      });
+    }
+
+    renderStudents();
+  </script>
+</body>
+</html>
